@@ -36,7 +36,7 @@ enum{ radius = 20 };
 - (UIImage *)addTouches:(NSSet *)touches;
 
 @property (nonatomic) int tilesFilled;
-@property (nonatomic,retain) Matrix *maskedMatrix;
+@property (nonatomic, strong) Matrix *maskedMatrix;
 @property (nonatomic) CGContextRef imageContext;
 @property (nonatomic) CGColorSpaceRef colorSpace;
 
@@ -54,7 +54,6 @@ enum{ radius = 20 };
 	self.maskedMatrix = nil;
 	CGColorSpaceRelease(self.colorSpace);
 	CGContextRelease(self.imageContext);
-    [super dealloc];
 }
 
 #pragma mark -
@@ -85,7 +84,7 @@ enum{ radius = 20 };
 		tilesX = size.width / (2 * radius);
 		tilesY = size.height / (2 * radius);
 		
-		self.maskedMatrix = [[[Matrix alloc] initWithMax:MySizeMake(tilesX, tilesY)] autorelease];
+		self.maskedMatrix = [[Matrix alloc] initWithMax:MySizeMake(tilesX, tilesY)];
 		self.tilesFilled = 0;
     }
     return self;

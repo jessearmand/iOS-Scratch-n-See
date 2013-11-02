@@ -36,9 +36,9 @@
 	self.window.backgroundColor = [UIColor blackColor];
 	
 	UIImage * sharpImage = [UIImage imageNamed:@"sharp_2.png"];
-	UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake((int)(self.window.bounds.size.width * .5 - sharpImage.size.width * .5),
+	UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake((int)(self.window.bounds.size.width * .5 - sharpImage.size.width * .5),
 																			(int)(self.window.bounds.size.height * .5 - sharpImage.size.height * .5),
-																			sharpImage.size.width, sharpImage.size.height)] autorelease];
+																			sharpImage.size.width, sharpImage.size.height)];
 	imageView.image = sharpImage;
 	[self.window addSubview:imageView];
 	
@@ -46,7 +46,7 @@
 	CGRect maskViewRect = CGRectMake((int)(self.window.bounds.size.width * .5 - sharpImage.size.width * .5),
 									 (int)(self.window.bounds.size.height * .5 - sharpImage.size.height * .5),
 									 blurImage.size.width, blurImage.size.height);
-    ImageMaskView *view = [[[ImageMaskView alloc] initWithFrame:maskViewRect image:blurImage] autorelease];
+    ImageMaskView *view = [[ImageMaskView alloc] initWithFrame:maskViewRect image:blurImage];
 	view.imageMaskFilledDelegate = self;
 
 	[self.window addSubview:view];
@@ -60,13 +60,5 @@
 - (void)imageMaskView:(ImageMaskView *)maskView clearPercentWasChanged:(float)clearPercent {
 	NSLog(@"percent: %.2f", clearPercent);
 }
-
-#pragma mark - Memory Management
-
-- (void)dealloc {
-    [window release];
-    [super dealloc];
-}
-
 
 @end

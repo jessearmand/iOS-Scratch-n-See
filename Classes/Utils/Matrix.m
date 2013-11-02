@@ -73,7 +73,6 @@ MySize MySizeMake(size_t x,size_t y){
 	if(data){
 		free(data);
 	}
-	[super dealloc];
 }
 
 @end
