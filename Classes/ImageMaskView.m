@@ -29,7 +29,7 @@
 #import "PointTransforms.h"
 #import "Matrix.h"
 
-enum{ radius = 20 };
+static int radius = 20;
 
 @interface ImageMaskView()
 
@@ -43,10 +43,6 @@ enum{ radius = 20 };
 @end
 
 @implementation ImageMaskView
-@synthesize imageMaskFilledDelegate;
-@synthesize tilesFilled;
-@synthesize maskedMatrix;
-@synthesize imageContext,colorSpace;
 
 #pragma mark - memory management
 
@@ -74,17 +70,17 @@ enum{ radius = 20 };
 												  size.height, 
 												  8, 
 												  size.width*4, 
-												  colorSpace, 
+												  _colorSpace,
 												  kCGImageAlphaPremultipliedLast	);
 		CGContextDrawImage(self.imageContext, CGRectMake(0, 0, size.width, size.height), self.image.CGImage);
 		
 		int blendMode = kCGBlendModeClear;
 		CGContextSetBlendMode(self.imageContext, (CGBlendMode) blendMode);
 		
-		tilesX = size.width / (2 * radius);
-		tilesY = size.height / (2 * radius);
+		_tilesX = size.width / (2 * radius);
+		_tilesY = size.height / (2 * radius);
 		
-		self.maskedMatrix = [[Matrix alloc] initWithMax:MySizeMake(tilesX, tilesY)];
+		self.maskedMatrix = [[Matrix alloc] initWithMax:MySizeMake(_tilesX, _tilesY)];
 		self.tilesFilled = 0;
     }
     return self;
@@ -187,8 +183,8 @@ void fillTileWithTwoPoints(CGPoint begin, CGPoint end, ImageMaskView *maskView)
 	CGFloat incrementerForx,incrementerFory;
 	
 	/* incrementers - about size of a tile */
-	incrementerForx = (begin.x < end.x ? 1 : -1) * maskView.image.size.width / maskView->tilesX;
-	incrementerFory = (begin.y < end.y ? 1 : -1) * maskView.image.size.height / maskView->tilesY;
+	incrementerForx = (begin.x < end.x ? 1 : -1) * maskView.image.size.width / maskView->_tilesX;
+	incrementerFory = (begin.y < end.y ? 1 : -1) * maskView.image.size.height / maskView->_tilesY;
 	
 	// iterate on points between begin and end
 	CGPoint i = begin;

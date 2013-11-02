@@ -28,7 +28,6 @@
 #import "blured_touchAppDelegate.h"
 
 @implementation blured_touchAppDelegate
-@synthesize window;
 
 #pragma mark - Application lifecycle
 

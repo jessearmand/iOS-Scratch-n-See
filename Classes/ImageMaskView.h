@@ -33,8 +33,8 @@
 @end
 
 @interface ImageMaskView : UIImageView {
-	size_t tilesX;
-	size_t tilesY;
+	size_t _tilesX;
+	size_t _tilesY;
 }
 
 @property (nonatomic, readonly) double procentsOfImageMasked;

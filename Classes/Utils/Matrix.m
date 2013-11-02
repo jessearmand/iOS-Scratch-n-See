@@ -33,12 +33,11 @@ MySize MySizeMake(size_t x,size_t y){
 }
 
 @implementation Matrix
-@synthesize max;
 
 - (id)initWithMaxX:(size_t)x MaxY:(size_t)y {
 	if (self = [super init]) {
-		data = (char *) malloc(x * y);
-		max = MySizeMake(x, y);
+		_data = (char *) malloc(x * y);
+		_max = MySizeMake(x, y);
 		[self fillWithValue:0];
 	}
 	return self;
@@ -51,16 +50,16 @@ MySize MySizeMake(size_t x,size_t y){
 #pragma mark -
 
 - (char)valueForCoordinates:(size_t)x y:(size_t)y {
-	return data[x + self.max.x * y];
+	return _data[x + self.max.x * y];
 }
 
 - (void)setValue:(char)value forCoordinates:(size_t)x y:(size_t)y{
-	data[x+ self.max.x*y] = value;
+	_data[x+ self.max.x*y] = value;
 }
 
 - (void)fillWithValue:(char)value {
 	size_t last = self.max.x * self.max.y;
-	char *temp = data;
+	char *temp = _data;
 	for(size_t i = 0; i < last; ++i){
 		*temp = value;
 		++temp;
@@ -70,8 +69,8 @@ MySize MySizeMake(size_t x,size_t y){
 #pragma mark -
 
 - (void)dealloc {
-	if(data){
-		free(data);
+	if(_data){
+		free(_data);
 	}
 }
 

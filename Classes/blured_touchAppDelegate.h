@@ -29,7 +29,7 @@
 #import "ImageMaskView.h"
 
 @interface blured_touchAppDelegate : NSObject <ImageMaskFilledDelegate, UIApplicationDelegate> {
-    UIWindow *window;
+
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;

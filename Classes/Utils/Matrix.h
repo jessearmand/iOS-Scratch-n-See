@@ -29,15 +29,15 @@
 #define _MATRIX_H_
 #import <Foundation/Foundation.h>
 
-typedef struct{
+typedef struct {
 	size_t x;
 	size_t y;
-}MySize;
+} MySize;
 
 MySize MySizeMake(size_t x,size_t y);
 
 @interface Matrix : NSObject {
-	char * data;
+	char * _data;
 }
 
 -(id)initWithMaxX:(size_t)x MaxY:(size_t)y;
