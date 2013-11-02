@@ -27,6 +27,11 @@
 
 #import "Matrix.h"
 
+MySize MySizeMake(size_t x,size_t y){
+	MySize r = {x,y};
+	return r;
+}
+
 @implementation Matrix
 @synthesize max;
 

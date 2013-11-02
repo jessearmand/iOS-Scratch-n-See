@@ -34,10 +34,8 @@ typedef struct{
 	size_t y;
 }MySize;
 
-MySize MySizeMake(size_t x,size_t y){
-	MySize r = {x,y};
-	return r;
-}
+MySize MySizeMake(size_t x,size_t y);
+
 @interface Matrix : NSObject {
 	char * data;
 }

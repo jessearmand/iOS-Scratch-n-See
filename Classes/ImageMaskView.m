@@ -31,14 +31,9 @@
 
 enum{ radius = 20 };
 
-typedef void  (*FillTileWithPointFunc)( id, SEL, CGPoint );
-typedef void  (*FillTileWithTwoPointsFunc)(id, SEL, CGPoint, CGPoint);
-
 @interface ImageMaskView()
 
 - (UIImage *)addTouches:(NSSet *)touches;
-- (void)fillTileWithPoint:(CGPoint) point;
-- (void)fillTileWithTwoPoints:(CGPoint)begin end:(CGPoint)end;
 
 @property (nonatomic) int tilesFilled;
 @property (nonatomic,retain) Matrix *maskedMatrix;
@@ -98,7 +93,7 @@ typedef void  (*FillTileWithTwoPointsFunc)(id, SEL, CGPoint, CGPoint);
 
 #pragma mark -
 
-- (double)procentsOfImageMasked {
+- (double)percentsOfImageMasked {
 	return 100.0 * self.tilesFilled / (self.maskedMatrix.max.x * self.maskedMatrix.max.y);
 }
 
@@ -137,8 +132,7 @@ typedef void  (*FillTileWithTwoPointsFunc)(id, SEL, CGPoint, CGPoint);
 			CGContextAddEllipseInRect(ctx, rect);
 			CGContextFillPath(ctx);
 
-			static const FillTileWithPointFunc fillTileFunc = (FillTileWithPointFunc) [self methodForSelector:@selector(fillTileWithPoint:)];
-			(*fillTileFunc)(self,@selector(fillTileWithPoint:),rect.origin);
+            fillTileWithPoint(rect.origin, self);
 		} else if(UITouchPhaseMoved == touch.phase) {
 			// then touch moved, we draw superior-width line
 			rect.origin = scalePoint(rect.origin, self.bounds.size, size);
@@ -153,14 +147,13 @@ typedef void  (*FillTileWithTwoPointsFunc)(id, SEL, CGPoint, CGPoint);
 			CGContextAddLineToPoint(ctx, rect.origin.x, rect.origin.y);
 			CGContextStrokePath(ctx);
 			
-			static const FillTileWithTwoPointsFunc fillTileFunc = (FillTileWithTwoPointsFunc) [self methodForSelector:@selector(fillTileWithTwoPoints:end:)];
-			(*fillTileFunc)(self,@selector(fillTileWithTwoPoints:end:),rect.origin, prevPoint);
+            fillTileWithTwoPoints(rect.origin, prevPoint, self);
 		}
 	}
 	
 	// was tilesFilled changed?
 	if(tempFilled != self.tilesFilled){
-		[self.imageMaskFilledDelegate imageMaskView:self cleatPercentWasChanged:[self procentsOfImageMasked]];
+		[self.imageMaskFilledDelegate imageMaskView:self clearPercentWasChanged:[self percentsOfImageMasked]];
 	}
 	
 	CGImageRef cgImage = CGBitmapContextCreateImage(ctx);
@@ -174,14 +167,15 @@ typedef void  (*FillTileWithTwoPointsFunc)(id, SEL, CGPoint, CGPoint);
  * filling tile with one ellipse
  */
 
--(void)fillTileWithPoint:(CGPoint) point{
+void fillTileWithPoint(CGPoint point, ImageMaskView *maskView)
+{
 	size_t x,y;	
-	x = point.x * self.maskedMatrix.max.x / self.image.size.width;
-	y = point.y * self.maskedMatrix.max.y / self.image.size.height;
-	char value = [self.maskedMatrix valueForCoordinates:x y:y];
+	x = point.x * maskView.maskedMatrix.max.x / maskView.image.size.width;
+	y = point.y * maskView.maskedMatrix.max.y / maskView.image.size.height;
+	char value = [maskView.maskedMatrix valueForCoordinates:x y:y];
 	if(!value){
-		[self.maskedMatrix setValue:1 forCoordinates:x y:y];
-		self.tilesFilled++;
+		[maskView.maskedMatrix setValue:1 forCoordinates:x y:y];
+		maskView.tilesFilled++;
 	}
 }
 
@@ -189,21 +183,21 @@ typedef void  (*FillTileWithTwoPointsFunc)(id, SEL, CGPoint, CGPoint);
  * filling tile with line
  */
 
--(void)fillTileWithTwoPoints:(CGPoint)begin end:(CGPoint)end{
+void fillTileWithTwoPoints(CGPoint begin, CGPoint end, ImageMaskView *maskView)
+{
 	CGFloat incrementerForx,incrementerFory;
-	static const FillTileWithPointFunc fillTileFunc = (FillTileWithPointFunc) [self methodForSelector:@selector(fillTileWithPoint:)];
 	
 	/* incrementers - about size of a tile */
-	incrementerForx = (begin.x < end.x ? 1 : -1) * self.image.size.width / tilesX;
-	incrementerFory = (begin.y < end.y ? 1 : -1) * self.image.size.height / tilesY;
+	incrementerForx = (begin.x < end.x ? 1 : -1) * maskView.image.size.width / maskView->tilesX;
+	incrementerFory = (begin.y < end.y ? 1 : -1) * maskView.image.size.height / maskView->tilesY;
 	
 	// iterate on points between begin and end
 	CGPoint i = begin;
 	while(i.x <= end.x && i.y <= end.y){
-		(*fillTileFunc)(self,@selector(fillTileWithPoint:),i);
+        fillTileWithPoint(i, maskView);
 		i.x += incrementerForx;
 		i.y += incrementerFory;
 	}
-	(*fillTileFunc)(self,@selector(fillTileWithPoint:),end);
+    fillTileWithPoint(end, maskView);
 }
 @end

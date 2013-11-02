@@ -57,7 +57,7 @@
 
 #pragma mark - ImageMaskFilledDelegate
 
-- (void)imageMaskView:(ImageMaskView *)maskView cleatPercentWasChanged:(float)clearPercent {
+- (void)imageMaskView:(ImageMaskView *)maskView clearPercentWasChanged:(float)clearPercent {
 	NSLog(@"percent: %.2f", clearPercent);
 }
 

@@ -29,7 +29,7 @@
 
 @class ImageMaskView;
 @protocol ImageMaskFilledDelegate
-- (void)imageMaskView:(ImageMaskView *)maskView cleatPercentWasChanged:(float)clearPercent;
+- (void)imageMaskView:(ImageMaskView *)maskView clearPercentWasChanged:(float)clearPercent;
 @end
 
 @interface ImageMaskView : UIImageView {

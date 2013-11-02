@@ -28,12 +28,12 @@
 #ifndef _POINT_TRANSFROMS_
 #define _POINT_TRANSFROMS_
 
-inline CGPoint fromUItoQuartz(CGPoint point,CGSize frameSize){
+CGPoint fromUItoQuartz(CGPoint point,CGSize frameSize){
 	point.y = frameSize.height - point.y;
 	return point;
 }
 
-inline CGPoint scalePoint(CGPoint point,CGSize previousSize,CGSize currentSize){
+CGPoint scalePoint(CGPoint point,CGSize previousSize,CGSize currentSize){
 	return CGPointMake(currentSize.width *point.x / previousSize.width, 
 					   currentSize.height *point.y / previousSize.height);
 }
